@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Instagram Username Generator by VINS</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{
+  min-height:100vh;background:#050505;color:#fff;
+  font-family:Arial,Helvetica,sans-serif;padding:18px;
+  background-image:radial-gradient(circle at 50% 0,#260000 0,transparent 42%);
+}
+.container{width:100%;max-width:900px;margin:auto}
+.header{text-align:center;margin:8px 0 24px}
+.logo{font-size:46px;font-weight:900;letter-spacing:6px;color:#f00;text-shadow:0 0 20px #600}
+.subtitle{font-size:12px;letter-spacing:3px;color:#888;margin-top:5px}
+.card{
+  background:rgba(10,10,10,.96);border:1px solid #d00;border-radius:16px;
+  padding:22px;box-shadow:0 0 35px rgba(180,0,0,.13);margin-bottom:16px
+}
+.controls{display:grid;grid-template-columns:1fr 1fr 140px 150px;gap:12px;align-items:end}
+label{display:block;color:#aaa;font-size:11px;letter-spacing:1px;text-transform:uppercase;margin:0 0 8px}
+select,input{
+  width:100%;height:46px;background:#080808;color:#fff;border:1px solid #333;
+  border-radius:8px;padding:0 13px;outline:none;font-size:14px
+}
+select:focus,input:focus{border-color:#e00000;box-shadow:0 0 0 2px #e000001f}
+.help{font-size:10px;color:#666;margin-top:6px}
+button{cursor:pointer;border-radius:8px;font-weight:800;letter-spacing:1px;transition:.15s}
+.generate{height:46px;border:1px solid #f00;background:#d90000;color:#fff}
+.generate:hover{background:#ff1010;transform:translateY(-1px)}
+.generate:active,.copy:active,.copyall:active{transform:scale(.97)}
+.result-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px}
+.result-title{font-size:18px;font-weight:900;font-style:italic;color:#f22;letter-spacing:2px}
+.copyall,.copy{
+  border:1px solid #d00;background:#101010;color:#ddd
+}
+.copyall{height:36px;padding:0 15px;font-size:10px}
+.copy{height:30px;padding:0 11px;font-size:9px;flex-shrink:0}
+.copy:hover,.copyall:hover{border-color:#f00;color:#fff;box-shadow:0 0 10px #f0000030}
+.results{display:flex;flex-direction:column;gap:6px;max-height:500px;overflow:auto}
+.item{
+  display:grid;grid-template-columns:42px 1fr 70px 65px;gap:8px;align-items:center;
+  min-height:42px;background:#090b0d;border:1px solid #1d1d1d;border-radius:8px;padding:5px 7px
+}
+.num{color:#f22;font-weight:900;text-align:center}
+.username{font-size:14px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.country{font-size:11px;color:#888}
+.empty{text-align:center;color:#555;padding:38px 10px;user-select:none}
+.count{margin-top:12px;color:#777;font-size:11px}
+.count b{color:#f22}
+.footer{text-align:center;color:#444;font-size:10px;letter-spacing:2px;margin-top:16px}
+@media(max-width:720px){
+ .controls{grid-template-columns:1fr 1fr}
+ .generate{grid-column:1/-1}
+}
+@media(max-width:480px){
+ body{padding:10px}.card{padding:15px}.controls{grid-template-columns:1fr}
+ .generate{grid-column:auto}.logo{font-size:35px}.item{grid-template-columns:34px 1fr 28px 58px}
+ .country{font-size:0}.country::before{content:"🇮🇩";font-size:14px}
+}
+</style>
+</head>
+<body>
+<div class="container">
+  <header class="header">
+    <div class="logo">VINS</div>
+    <div class="subtitle">INSTAGRAM USERNAME GENERATOR</div>
+  </header>
+
+  <section class="card">
+    <div class="controls">
+      <div>
+        <label>Gaya Username</label>
+        <select id="style">
+          <option value="random">Random Mix</option>
+          <option value="aesthetic">Aesthetic</option>
+          <option value="clean">Clean</option>
+          <option value="cute">Cute</option>
+          <option value="classy">Classy</option>
+          <option value="short">Short</option>
+        </select>
+        <div class="help">Aesthetic, cute, soft, classy, clean, dll.</div>
+      </div>
+      <div>
+        <label>Negara Username</label>
+        <select id="country">
+          <option value="id">🇮🇩 Indonesia</option>
+          <option value="us">🇺🇸 USA</option>
+          <option value="uk">🇬🇧 United Kingdom</option>
+          <option value="fr">🇫🇷 France</option>
+          <option value="de">🇩🇪 Germany</option>
+          <option value="it">🇮🇹 Italy</option>
+          <option value="es">🇪🇸 Spain</option>
+          <option value="jp">🇯🇵 Japan</option>
+          <option value="kr">🇰🇷 South Korea</option>
+        </select>
+        <div class="help">Gaya nama wanita mengikuti negara.</div>
+      </div>
+      <div>
+        <label>Jumlah</label>
+        <input id="amount" type="number" value="20" min="1" max="100">
+        <div class="help">Maksimal 100</div>
+      </div>
+      <button class="generate" id="generate">✦ GENERATE</button>
+    </div>
+  </section>
+
+  <section class="card">
+    <div class="result-head">
+      <div class="result-title">RESULT</div>
+      <button class="copyall" id="copyAll">▣ COPY ALL</button>
+    </div>
+    <div id="results" class="results">
+      <div class="empty">Belum ada username.</div>
+    </div>
+    <div id="count" class="count"></div>
+  </section>
+
+  <div class="footer">• INSTAGRAM USERNAME GENERATOR BY <span style="color:#f00">VINS</span> •</div>
+</div>
+
+<script>
+const names={
+ id:["Alya","Nayla","Nabila","Zahra","Aurel","Citra","Dinda","Putri","Salsa","Nadia","Anisa","Syifa","Rania","Keyla","Tiara","Shakira","Vania","Keisha","Aisyah","Nadine"],
+ us:["Olivia","Emma","Sophia","Ava","Mia","Amelia","Lily","Chloe","Ella","Grace","Zoey","Riley","Aria","Luna","Nora","Layla","Maya","Bella","Sophie","Hailey"],
+ uk:["Isla","Amelia","Olivia","Emily","Poppy","Ava","Isabella","Lily","Sophie","Grace","Freya","Ella","Sienna","Ruby","Daisy","Evie","Florence","Elsie","Matilda","Alice"],
+ fr:["Chloé","Camille","Manon","Léa","Emma","Louise","Jade","Alice","Juliette","Clara","Inès","Lola","Zoé","Amélie","Eva","Rose","Anaïs","Élise","Maëlle","Adèle"],
+ de:["Emma","Mia","Hannah","Emilia","Lina","Lea","Ella","Mila","Clara","Leni","Marie","Anna","Laura","Sophie","Leonie","Amelie","Frieda","Lotta","Greta","Nele"],
+ it:["Giulia","Sofia","Aurora","Ginevra","Alice","Beatrice","Chiara","Vittoria","Matilde","Emma","Francesca","Elena","Martina","Sara","Gaia","Camilla","Ludovica","Greta","Noemi","Arianna"],
+ es:["Lucía","Sofía","Martina","María","Paula","Julia","Valeria","Emma","Daniela","Carla","Alba","Sara","Carmen","Claudia","Marta","Lola","Vega","Aitana","Nora","Irene"],
+ jp:["Yui","Aoi","Hina","Mio","Rin","Sakura","Yuna","Mei","Akari","Hana","Riko","Miku","Nanami","Saki","Koharu","Mao","Nana","Rina","Ayaka","Yuna"],
+ kr:["Seo-yeon","Ji-woo","Ha-eun","Min-seo","Soo-jin","Ye-eun","Ji-min","Eun-ji","Hye-jin","Na-eun","Yu-na","Da-eun","Chae-won","Su-bin","Bo-ra","Yeon-woo","Ara","Jin-ah","Sae-rom","Mi-rae"]
+};
+const extras=["official","daily","vibes","girl","girlx","world","diary","love","luna","angel","cloud","rose","moon","star","dream","glow","bby","luv","xo","jpg","era"];
+const styles={
+ aesthetic:(n)=>[`${n}.vibes`,`${n}.era`,`${n}.glow`,`${n}.luna`,`${n}.diary`,`${n}.dream`,`${n}.jpg`],
+ clean:(n)=>[`${n}official`,`${n}.daily`,`${n}.world`,`${n}girl`,`${n}xo`,`${n}x`],
+ cute:(n)=>[`${n}bby`,`${n}.bby`,`${n}luv`,`${n}.love`,`${n}angel`,`${n}girl`],
+ classy:(n)=>[`its${n}`,`the${n}`,`miss${n}`,`${n}.official`,`${n}.luxe`,`${n}.rose`],
+ short:(n)=>[`${n}x`,`${n}xx`,`${n}xo`,`${n}${rand(2)}`,`${n}.${rand(2)}`]
+};
+function clean(s){return s.toLowerCase().normalize("NFD").replace(/[\\u0300-\\u036f]/g,"").replace(/[^a-z0-9]/g,"")}
+function rand(len=2){return Math.floor(Math.random()*Math.pow(10,len)).toString().padStart(len,"0")}
+function pick(a){return a[Math.floor(Math.random()*a.length)]}
+function make(style,n){
+ if(style==="random"){
+   style=pick(["aesthetic","clean","cute","classy","short"]);
+ }
+ return pick(styles[style](n));
+}
+let generated=[];
+function generate(){
+ const country=document.getElementById("country").value;
+ const style=document.getElementById("style").value;
+ let amount=Math.max(1,Math.min(100,parseInt(document.getElementById("amount").value)||20));
+ const pool=names[country].map(clean);
+ const set=new Set(); generated=[];
+ let tries=0;
+ while(generated.length<amount && tries<amount*50){
+   const n=pick(pool), u=make(style,n).replace(/[^a-z0-9._]/g,"").slice(0,30).replace(/^[._]+|[._]+$/g,"");
+   if(u && !set.has(u)){set.add(u);generated.push(u)}
+   tries++;
+ }
+ render();
+}
+function render(){
+ const box=document.getElementById("results");
+ box.innerHTML="";
+ if(!generated.length){box.innerHTML='<div class="empty">Belum ada username.</div>';return}
+ const country=document.getElementById("country").value;
+ const flag={id:"🇮🇩",us:"🇺🇸",uk:"🇬🇧",fr:"🇫🇷",de:"🇩🇪",it:"🇮🇹",es:"🇪🇸",jp:"🇯🇵",kr:"🇰🇷"}[country];
+ generated.forEach((u,i)=>{
+   const row=document.createElement("div");row.className="item";
+   row.innerHTML=`<div class="num">${i+1}.</div><div class="username">@${u}</div><div class="country">${flag} ${country.toUpperCase()}</div><button class="copy">COPY</button>`;
+   row.querySelector(".copy").onclick=async()=>{await navigator.clipboard.writeText(u);row.querySelector(".copy").textContent="COPIED";setTimeout(()=>row.querySelector(".copy").textContent="COPY",900)}
+   box.appendChild(row);
+ });
+ document.getElementById("count").innerHTML=`<b>${generated.length}</b> username generated`;
+}
+document.getElementById("generate").onclick=generate;
+document.getElementById("copyAll").onclick=async()=>{
+ if(!generated.length)return;
+ await navigator.clipboard.writeText(generated.join("\\n"));
+ const b=document.getElementById("copyAll");b.textContent="COPIED";setTimeout(()=>b.textContent="▣ COPY ALL",1000);
+};
+</script>
+</body>
+</html>
